@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>苟泽 — 个人简历</title>
+  <style>
+    /* ===== Reset & Variables ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f8f9fb;
+      --surface: #ffffff;
+      --text: #1e1e24;
+      --text-2: #5b5b66;
+      --text-3: #91919b;
+      --accent: #4f46e5;
+      --accent-glow: rgba(79, 70, 229, 0.12);
+      --accent-2: #818cf8;
+      --border: #e8e8ef;
+      --border-light: #f0f0f5;
+      --hero-bg: #0f0f16;
+      --hero-text: #f1f1f6;
+      --hero-sub: #a0a0b8;
+      --radius: 14px;
+      --radius-sm: 10px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ===== Scrollbar ===== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #d0d0da; border-radius: 3px; }
+
+    /* ===== Hero ===== */
+    .hero {
+      position: relative;
+      background: var(--hero-bg);
+      color: var(--hero-text);
+      padding: 80px 24px 70px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 30%, rgba(79, 70, 229, 0.15), transparent),
+        radial-gradient(ellipse 50% 60% at 80% 80%, rgba(129, 140, 248, 0.06), transparent),
+        radial-gradient(ellipse 40% 50% at 20% 70%, rgba(79, 70, 229, 0.05), transparent);
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-content { position: relative; z-index: 1; }
+
+    .hero-avatar {
+      width: 88px; height: 88px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 28px;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: white;
+      box-shadow: 0 0 0 6px rgba(79, 70, 229, 0.15), 0 0 40px rgba(79, 70, 229, 0.2);
+      letter-spacing: 0.02em;
+    }
+
+    .hero-name {
+      font-size: clamp(2.4rem, 5vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      margin-bottom: 10px;
+      line-height: 1.15;
+    }
+
+    .hero-title {
+      font-size: 1.15rem;
+      color: var(--hero-sub);
+      font-weight: 400;
+      margin-bottom: 28px;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-contact {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-size: 0.92rem;
+      font-weight: 500;
+      text-decoration: none;
+      color: var(--hero-text);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: all var(--transition);
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-cta:hover {
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.22);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    }
+
+    .hero-cta svg { width: 16px; height: 16px; opacity: 0.7; }
+
+    /* ===== Stats Strip ===== */
+    .stats-strip {
+      max-width: 760px;
+      margin: -30px auto 0;
+      padding: 0 24px;
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 22px 18px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05), 0 0 0 1px var(--border-light);
+      transition: transform var(--transition), box-shadow var(--transition);
+      cursor: default;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.08), 0 0 0 1px var(--border);
+    }
+
+    .stat-number {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 0.82rem;
+      color: var(--text-3);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    /* ===== Main Content ===== */
+    .main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 48px 24px 60px;
+    }
+
+    /* ===== Section ===== */
+    .section {
+      margin-bottom: 28px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .section-icon {
+      width: 40px; height: 40px;
+      border-radius: var(--radius-sm);
+      background: var(--accent-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .section-icon svg { width: 20px; height: 20px; color: var(--accent); }
+
+    .section-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 2px;
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    /* ===== Timeline ===== */
+    .timeline { position: relative; padding-left: 0; }
+
+    .timeline-item {
+      position: relative;
+      padding: 26px 28px 26px 48px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      margin-bottom: 14px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03), 0 0 0 1px var(--border-light);
+      transition: transform var(--transition), box-shadow var(--transition);
+      cursor: default;
+    }
+
+    .timeline-item:hover {
+      transform: translateX(4px);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.06), 0 0 0 1px var(--border);
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: 20px;
+      top: 30px;
+      width: 10px; height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 0 5px var(--accent-glow);
+      transition: box-shadow var(--transition);
+    }
+
+    .timeline-item:hover::before {
+      box-shadow: 0 0 0 10px var(--accent-glow);
+    }
+
+    .timeline-item::after {
+      content: '';
+      position: absolute;
+      left: 24px;
+      top: 48px;
+      width: 2px;
+      height: calc(100% + 14px);
+      background: var(--border);
+    }
+
+    .timeline-item:last-child::after { display: none; }
+
+    .timeline-role {
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .timeline-company {
+      font-size: 0.9rem;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .timeline-date {
+      display: inline-block;
+      font-size: 0.8rem;
+      color: var(--text-3);
+      font-weight: 500;
+      background: var(--bg);
+      padding: 3px 12px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+    }
+
+    .timeline-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .timeline-list li {
+      position: relative;
+      padding-left: 18px;
+      margin-bottom: 6px;
+      font-size: 0.93rem;
+      color: var(--text-2);
+      line-height: 1.65;
+    }
+
+    .timeline-list li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 10px;
+      width: 5px; height: 5px;
+      background: var(--accent-2);
+      border-radius: 50%;
+      opacity: 0.6;
+    }
+
+    /* Highlight metric */
+    .metric-pop {
+      display: inline-block;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-glow);
+      padding: 1px 7px;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    /* ===== Education ===== */
+    .edu-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 26px 28px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03), 0 0 0 1px var(--border-light);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+
+    .edu-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.06), 0 0 0 1px var(--border);
+    }
+
+    .edu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .edu-school { font-weight: 700; font-size: 1.08rem; }
+    .edu-major { color: var(--text-2); font-weight: 400; }
+    .edu-degree { color: var(--accent); font-weight: 600; font-size: 0.85rem; }
+    .edu-date { font-size: 0.85rem; color: var(--text-3); }
+
+    .edu-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .edu-detail {
+      flex: 1;
+      min-width: 220px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      padding: 16px 18px;
+      font-size: 0.9rem;
+      color: var(--text-2);
+      line-height: 1.6;
+    }
+
+    .edu-detail strong {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+    }
+
+    /* ===== Skills ===== */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .skill-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03), 0 0 0 1px var(--border-light);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+
+    .skill-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.06), 0 0 0 1px var(--border);
+    }
+
+    .skill-card-title {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 14px;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .skill-tag {
+      display: inline-block;
+      padding: 5px 13px;
+      background: var(--bg);
+      color: var(--text-2);
+      border-radius: 20px;
+      font-size: 0.86rem;
+      font-weight: 500;
+      border: 1px solid transparent;
+      transition: all var(--transition);
+      cursor: default;
+    }
+
+    .skill-tag:hover {
+      color: var(--accent);
+      background: var(--accent-glow);
+      border-color: rgba(79, 70, 229, 0.15);
+      transform: translateY(-1px);
+    }
+
+    /* ===== Phone Gate Modal ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 15, 22, 0.6);
+      backdrop-filter: blur(6px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal {
+      background: var(--surface);
+      border-radius: 18px;
+      padding: 36px 30px 30px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.2);
+      transform: translateY(12px) scale(0.97);
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      position: relative;
+    }
+
+    .modal-overlay.active .modal {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px; right: 18px;
+      background: none; border: none;
+      font-size: 1.3rem; color: var(--text-3);
+      cursor: pointer; padding: 4px 8px;
+      border-radius: 6px;
+      transition: all var(--transition);
+    }
+
+    .modal-close:hover { color: var(--text); background: var(--bg); }
+
+    .modal-icon {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: var(--accent-glow);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 18px;
+    }
+
+    .modal-icon svg { width: 26px; height: 26px; color: var(--accent); }
+
+    .modal h3 {
+      text-align: center;
+      font-size: 1.2rem; font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .modal .modal-sub {
+      text-align: center;
+      font-size: 0.88rem; color: var(--text-3);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .modal-step { display: none; }
+    .modal-step.active { display: block; }
+
+    .modal .email-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 14px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 1rem; font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all var(--transition);
+    }
+
+    .modal .email-btn:hover {
+      background: #4338ca;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(79, 70, 229, 0.3);
+    }
+
+    .modal-divider {
+      display: flex; align-items: center;
+      gap: 14px;
+      margin: 20px 0;
+      color: var(--text-3);
+      font-size: 0.82rem;
+    }
+
+    .modal-divider::before, .modal-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    .modal .code-input-group {
+      display: flex; gap: 10px;
+    }
+
+    .modal .code-input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
+      font-family: inherit;
+    }
+
+    .modal .code-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .modal .code-submit {
+      padding: 12px 22px;
+      background: var(--text);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem; font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+
+    .modal .code-submit:hover { background: #333; }
+
+    .modal .code-error {
+      font-size: 0.82rem; color: #dc2626;
+      margin-top: 8px;
+      display: none;
+    }
+
+    .modal .phone-result {
+      text-align: center;
+      padding: 20px;
+      background: #f0fdf4;
+      border-radius: var(--radius-sm);
+      border: 1px solid #bbf7d0;
+    }
+
+    .modal .phone-result .phone-num {
+      font-size: 1.5rem; font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.03em;
+    }
+
+    .modal .phone-result .phone-num a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* ===== Contact ===== */
+    .contact-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 22px;
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.93rem;
+      font-weight: 500;
+      transition: all var(--transition);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .contact-btn:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-glow);
+      transform: translateY(-2px);
+    }
+
+    .contact-btn svg { width: 18px; height: 18px; color: var(--accent); flex-shrink: 0; }
+
+    /* ===== Footer ===== */
+    .footer {
+      text-align: center;
+      padding: 40px 24px 50px;
+      color: var(--text-3);
+      font-size: 0.85rem;
+    }
+
+    .footer-line {
+      width: 40px; height: 2px;
+      background: var(--border);
+      margin: 0 auto 16px;
+      border-radius: 1px;
+    }
+
+    /* ===== Scroll Animations ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-stagger > * { opacity: 0; transform: translateY(20px); }
+    .reveal-stagger > *.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 640px) {
+      .hero { padding: 56px 20px 50px; }
+      .hero-avatar { width: 68px; height: 68px; font-size: 1.6rem; margin-bottom: 20px; }
+      .hero-name { font-size: 2rem; }
+      .hero-title { font-size: 1rem; }
+      .hero-contact { flex-direction: column; align-items: center; }
+
+      .stats-strip {
+        grid-template-columns: 1fr;
+        margin-top: -20px;
+        gap: 10px;
+      }
+
+      .main { padding: 36px 16px 40px; }
+      .timeline-item { padding: 20px 16px 20px 38px; }
+      .timeline-item::before { left: 14px; top: 26px; }
+      .timeline-item::after { left: 18px; top: 44px; }
+      .timeline-item:hover { transform: translateX(2px); }
+
+      .skills-grid { grid-template-columns: 1fr; }
+      .edu-header { flex-direction: column; gap: 2px; }
+      .edu-details { flex-direction: column; }
+    }
+
+    /* ===== Print ===== */
+    @media print {
+      .hero { background: #fff; color: #000; padding: 30px 20px 20px; }
+      .hero::before, .hero-grid { display: none; }
+      .hero-name { color: #000; }
+      .hero-title { color: #555; }
+      .hero-cta { color: #000; background: none; border: 1px solid #ccc; }
+
+      .stats-strip { margin-top: 20px; }
+      .stat-card { box-shadow: none; border: 1px solid #ddd; }
+
+      .reveal, .reveal-stagger > * {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+
+      .timeline-item, .skill-card, .edu-card, .stat-card {
+        box-shadow: none; border: 1px solid #ddd; break-inside: avoid;
+      }
+      .timeline-item:hover, .skill-card:hover, .edu-card:hover, .stat-card:hover {
+        transform: none;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Hero ===== -->
+  <header class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-avatar">苟</div>
+      <h1 class="hero-name">苟泽</h1>
+      <p class="hero-title">谷歌搜索引擎优化师 · Google SEO Specialist</p>
+      <div class="hero-contact">
+        <a href="mailto:gouze7907@gmail.com" class="hero-cta">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          gouze7907@gmail.com
+        </a>
+        <span class="hero-cta" onclick="openPhoneModal()" style="cursor:pointer" title="申请查看电话">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          🔒 申请查看电话
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== Stats ===== -->
+  <div class="stats-strip reveal">
+    <div class="stat-card">
+      <div class="stat-number">3 年+</div>
+      <div class="stat-label">Google SEO 实战经验</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">4 家</div>
+      <div class="stat-label">服务企业 / 操盘独立站</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">428%</div>
+      <div class="stat-label">最高自然流量增长</div>
+    </div>
+  </div>
+
+  <!-- ===== Main Content ===== -->
+  <main class="main">
+
+    <!-- 工作经历 -->
+    <section class="section reveal">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+          </svg>
+        </div>
+        <div>
+          <div class="section-label">Experience</div>
+          <div class="section-title">工作经历</div>
+        </div>
+      </div>
+
+      <div class="timeline reveal-stagger">
+        <div class="timeline-item">
+          <div class="timeline-role">独立站谷歌搜索引擎优化师</div>
+          <div class="timeline-company">四川鸿生智恩食品有限公司（MHW-3BOMBER 轰炸机）</div>
+          <span class="timeline-date">2024.07 — 2025.06</span>
+          <ul class="timeline-list">
+            <li>负责品牌独立站基础运营及 SEO 全渠道推广，制定并执行 SEO 策略方案，从零搭建内容矩阵</li>
+            <li>主导创建博客教程板块与主题分类聚合页，关键词「虹吸手冲咖啡区别」<span class="metric-pop">100+</span> 词条入围 Google 精选搜索结果；三个搜索量 <span class="metric-pop">20k+</span> 核心大词登上精选摘要</li>
+            <li>前 10 名关键词从 117 个增长至 <span class="metric-pop">339 个</span>，"moka"(27.1k)、"moka machines"(22.2k) 等 10 个行业大词排至首页；SERP 精选结果从 4 个增至 <span class="metric-pop">254 个</span></li>
+            <li>自然流量 2,538 → 13,404（<span class="metric-pop">+428%</span>），转化率 0.53% → 1.04%；域名权重 DA 6 → <span class="metric-pop">27</span>（+350%）</li>
+          </ul>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-role">独立站谷歌搜索引擎优化师</div>
+          <div class="timeline-company">四川比得鑫科技有限公司</div>
+          <span class="timeline-date">2023.07 — 2024.07</span>
+          <ul class="timeline-list">
+            <li>负责网站运营及 SEO 渠道推广，提升关键词排名与自然流量</li>
+            <li>自然流量 GA 会话数达 2,800（同比 <span class="metric-pop">+134%</span>），自然渠道转化金额 $17,517（同比 <span class="metric-pop">+578%</span>）</li>
+            <li>GSC 曝光量 2.71 万（+97.8%），点击次数 5,235（+137%）</li>
+            <li>主导新品调研，筛选出 2 款潜力产品，上线半年内成为网站 <span class="metric-pop">销量 Top 3</span></li>
+          </ul>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-role">谷歌搜索引擎优化师</div>
+          <div class="timeline-company">创贸科技（深圳）集团有限公司（全球搜）</div>
+          <span class="timeline-date">2022.03 — 2023.06</span>
+          <ul class="timeline-list">
+            <li>负责英文网站站内优化及外链建设，制定 SEO 推广方案，提升 Google 搜索排名与自然流量</li>
+            <li>服务石家庄鸿欣橡胶等大型客户，谷歌首页核心关键词 <span class="metric-pop">200+</span>，首页总关键词 <span class="metric-pop">900+</span>，关键词库同比上升 4000%，流量上升 160%，年均 <span class="metric-pop">1000+</span> 封询盘</li>
+            <li>实习转正评估——同批次<span class="metric-pop">唯一</span>P2 级；入职半年竞聘<span class="metric-pop">第一名</span>，唯一晋升正式优化师</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 教育背景 -->
+    <section class="section reveal">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 4 3 6 3s6-1 6-3v-5"/>
+          </svg>
+        </div>
+        <div>
+          <div class="section-label">Education</div>
+          <div class="section-title">教育背景</div>
+        </div>
+      </div>
+
+      <div class="edu-card">
+        <div class="edu-header">
+          <div>
+            <span class="edu-school">西华师范大学</span>
+            <span class="edu-major"> · 商务英语</span>
+          </div>
+          <div>
+            <span class="edu-degree">本科</span>
+            <span class="edu-date"> · 2017.09 — 2021.06</span>
+          </div>
+        </div>
+        <div class="edu-details">
+          <div class="edu-detail">
+            <strong>主修课程</strong>
+            跨境电商、国际经济与贸易、商务翻译、经济学、管理学、报关实务、国际商务谈判、商务英语写作
+          </div>
+          <div class="edu-detail">
+            <strong>荣誉奖项</strong>
+            校级优秀学生干部 · 一等奖学金（2次）· 三等奖学金 · 优秀团员 · 商务英语实践大赛一等奖（郫县豆瓣营销策划方案）
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 技能 -->
+    <section class="section reveal">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </div>
+        <div>
+          <div class="section-label">Skills</div>
+          <div class="section-title">技能 & 工具</div>
+        </div>
+      </div>
+
+      <div class="skills-grid reveal-stagger">
+        <div class="skill-card">
+          <div class="skill-card-title">SEO & 数据分析</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Semrush</span>
+            <span class="skill-tag">Ahrefs</span>
+            <span class="skill-tag">KWFinder</span>
+            <span class="skill-tag">MOZ</span>
+            <span class="skill-tag">Google Search Console</span>
+            <span class="skill-tag">Google Analytics</span>
+            <span class="skill-tag">关键词研究</span>
+            <span class="skill-tag">外链策略</span>
+            <span class="skill-tag">E-E-A-T</span>
+          </div>
+        </div>
+
+        <div class="skill-card">
+          <div class="skill-card-title">建站 & 开发</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Shopify</span>
+            <span class="skill-tag">WordPress</span>
+            <span class="skill-tag">HTML</span>
+            <span class="skill-tag">CSS</span>
+            <span class="skill-tag">JavaScript</span>
+            <span class="skill-tag">UI/UX 优化</span>
+          </div>
+        </div>
+
+        <div class="skill-card">
+          <div class="skill-card-title">语言 & 证书</div>
+          <div class="skill-tags">
+            <span class="skill-tag">英语专八（良好）</span>
+            <span class="skill-tag">英语专四</span>
+            <span class="skill-tag">CET-4 / CET-6</span>
+            <span class="skill-tag">高中英语教师资格证</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 联系方式 -->
+    <section class="section reveal">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <div>
+          <div class="section-label">Contact</div>
+          <div class="section-title">联系方式</div>
+        </div>
+      </div>
+
+      <div class="contact-row reveal-stagger">
+        <a href="mailto:gouze7907@gmail.com" class="contact-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          邮箱：gouze7907@gmail.com
+        </a>
+        <span class="contact-btn" onclick="openPhoneModal()" style="cursor:pointer" title="申请查看电话">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          🔒 申请查看电话
+        </span>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-line"></div>
+    <p>苟泽 · 个人简历</p>
+  </footer>
+
+  <!-- ===== Phone Access Modal ===== -->
+  <div class="modal-overlay" id="phoneModal">
+    <div class="modal">
+      <button class="modal-close" onclick="closePhoneModal()">✕</button>
+
+      <!-- Step 1: Request -->
+      <div class="modal-step active" id="modalStep1">
+        <div class="modal-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </div>
+        <h3>申请查看电话</h3>
+        <p class="modal-sub">为保护隐私，请先发送邮件申请。<br>我会在回复中提供授权码。</p>
+        <a class="email-btn" href="mailto:gouze7907@gmail.com?subject=申请查看电话&body=你好苟泽，%0D%0A%0D%0A我想获取你的联系方式，请回复授权码。%0D%0A%0D%0A我的信息：%0D%0A姓名：%0D%0A公司/机构：%0D%0A事由：" target="_blank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          发送申请邮件
+        </a>
+        <div class="modal-divider">已获得授权码？</div>
+        <div class="code-input-group">
+          <input class="code-input" id="codeInput" type="text" placeholder="请输入授权码" autocomplete="off">
+          <button class="code-submit" onclick="verifyCode()">验证</button>
+        </div>
+        <p class="code-error" id="codeError">授权码不正确，请检查后重试</p>
+      </div>
+
+      <!-- Step 2: Success -->
+      <div class="modal-step" id="modalStep2">
+        <div class="modal-icon" style="background:#f0fdf4">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" style="width:26px;height:26px">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <h3>验证通过 ✓</h3>
+        <p class="modal-sub">以下是苟泽的联系方式：</p>
+        <div class="phone-result">
+          <div class="phone-num">
+            <a href="tel:17765529026">177-6552-9026</a>
+          </div>
+          <div style="font-size:0.85rem;color:var(--text-3);margin-top:6px">点击号码可直接拨打</div>
+        </div>
+        <button class="email-btn" style="margin-top:20px;background:var(--text)" onclick="closePhoneModal()">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Scripts ===== -->
+  <script>
+    // ========== Phone Access Control ==========
+    // 修改授权码：在下方引号内填入你的授权码，然后打开此页面，浏览器控制台会打印新的哈希值，替换下面的 HASH
+    // 默认授权码: gouze2025
+    const ACCESS_HASH = 'c26174f529431b7037912f793942d2c68fb931a4367f9dafc534ca750a9e0fd7';
+
+    async function sha256(message) {
+      const msgBuffer = new TextEncoder().encode(message);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    function openPhoneModal() {
+      document.getElementById('phoneModal').classList.add('active');
+      document.getElementById('modalStep1').classList.add('active');
+      document.getElementById('modalStep2').classList.remove('active');
+      document.getElementById('codeInput').value = '';
+      document.getElementById('codeError').style.display = 'none';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePhoneModal() {
+      document.getElementById('phoneModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    async function verifyCode() {
+      const input = document.getElementById('codeInput').value.trim();
+      if (!input) return;
+      const hash = await sha256(input);
+      if (hash === ACCESS_HASH) {
+        document.getElementById('modalStep1').classList.remove('active');
+        document.getElementById('modalStep2').classList.add('active');
+        document.getElementById('codeError').style.display = 'none';
+      } else {
+        document.getElementById('codeError').style.display = 'block';
+        document.getElementById('codeInput').value = '';
+      }
+    }
+
+    document.getElementById('codeInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') verifyCode();
+    });
+
+    document.getElementById('phoneModal').addEventListener('click', function(e) {
+      if (e.target === this) closePhoneModal();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closePhoneModal();
+    });
+
+    // ========== Scroll Animations ==========
+    (function() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const el = entry.target;
+            el.classList.add('visible');
+            if (el.classList.contains('reveal-stagger')) {
+              Array.from(el.children).forEach((child, i) => {
+                child.style.transitionDelay = (i * 0.08) + 's';
+                child.classList.add('visible');
+              });
+            }
+            observer.unobserve(el);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
+
+      document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => observer.observe(el));
+    })();
+  </script>
+
+</body>
+</html>
