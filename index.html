@@ -5,24 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>苟泽 — 个人简历</title>
   <style>
-    /* ===== Reset & Base ===== */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    /* ===== Reset & Variables ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --text: #1a1a1a;
-      --text-secondary: #555;
-      --text-muted: #888;
-      --bg: #fafafa;
-      --card-bg: #ffffff;
-      --accent: #2563eb;
-      --accent-light: #eff6ff;
-      --border: #e5e7eb;
-      --shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-      --max-width: 720px;
+      --bg: #f8f9fb;
+      --surface: #ffffff;
+      --text: #1e1e24;
+      --text-2: #5b5b66;
+      --text-3: #91919b;
+      --accent: #4f46e5;
+      --accent-glow: rgba(79, 70, 229, 0.12);
+      --accent-2: #818cf8;
+      --border: #e8e8ef;
+      --border-light: #f0f0f5;
+      --hero-bg: #0f0f16;
+      --hero-text: #f1f1f6;
+      --hero-sub: #a0a0b8;
+      --radius: 14px;
+      --radius-sm: 10px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     body {
@@ -31,510 +33,784 @@
       background: var(--bg);
       line-height: 1.7;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
-    /* ===== Layout ===== */
-    .container {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 60px 24px 80px;
-    }
+    /* ===== Scrollbar ===== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #d0d0da; border-radius: 3px; }
 
-    /* ===== Header ===== */
-    .header {
+    /* ===== Hero ===== */
+    .hero {
+      position: relative;
+      background: var(--hero-bg);
+      color: var(--hero-text);
+      padding: 80px 24px 70px;
       text-align: center;
-      padding: 60px 32px 48px;
-      background: var(--card-bg);
-      border-radius: 16px;
-      box-shadow: var(--shadow);
-      margin-bottom: 32px;
+      overflow: hidden;
     }
 
-    .header-name {
-      font-size: 2.4rem;
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 30%, rgba(79, 70, 229, 0.15), transparent),
+        radial-gradient(ellipse 50% 60% at 80% 80%, rgba(129, 140, 248, 0.06), transparent),
+        radial-gradient(ellipse 40% 50% at 20% 70%, rgba(79, 70, 229, 0.05), transparent);
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-content { position: relative; z-index: 1; }
+
+    .hero-avatar {
+      width: 88px; height: 88px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 28px;
+      font-size: 2.2rem;
       font-weight: 700;
+      color: white;
+      box-shadow: 0 0 0 6px rgba(79, 70, 229, 0.15), 0 0 40px rgba(79, 70, 229, 0.2);
       letter-spacing: 0.02em;
-      color: var(--text);
-      margin-bottom: 8px;
     }
 
-    .header-title {
+    .hero-name {
+      font-size: clamp(2.4rem, 5vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      margin-bottom: 10px;
+      line-height: 1.15;
+    }
+
+    .hero-title {
       font-size: 1.15rem;
+      color: var(--hero-sub);
       font-weight: 400;
-      color: var(--text-secondary);
-      margin-bottom: 20px;
+      margin-bottom: 28px;
+      letter-spacing: 0.02em;
     }
 
-    .header-contact {
+    .hero-contact {
       display: flex;
       justify-content: center;
-      gap: 24px;
+      gap: 6px;
       flex-wrap: wrap;
-      font-size: 0.95rem;
-      color: var(--text-secondary);
     }
 
-    .header-contact a {
-      color: var(--accent);
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-size: 0.92rem;
+      font-weight: 500;
       text-decoration: none;
-      transition: color 0.2s;
+      color: var(--hero-text);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: all var(--transition);
+      backdrop-filter: blur(8px);
     }
 
-    .header-contact a:hover {
-      color: #1d4ed8;
-      text-decoration: underline;
+    .hero-cta:hover {
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.22);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
     }
 
-    .contact-item {
+    .hero-cta svg { width: 16px; height: 16px; opacity: 0.7; }
+
+    /* ===== Stats Strip ===== */
+    .stats-strip {
+      max-width: 760px;
+      margin: -30px auto 0;
+      padding: 0 24px;
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 22px 18px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05), 0 0 0 1px var(--border-light);
+      transition: transform var(--transition), box-shadow var(--transition);
+      cursor: default;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.08), 0 0 0 1px var(--border);
+    }
+
+    .stat-number {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 0.82rem;
+      color: var(--text-3);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    /* ===== Main Content ===== */
+    .main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 48px 24px 60px;
+    }
+
+    /* ===== Section ===== */
+    .section {
+      margin-bottom: 28px;
+    }
+
+    .section-header {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 14px;
+      margin-bottom: 22px;
     }
 
-    .contact-icon {
-      width: 18px;
-      height: 18px;
-      color: var(--text-muted);
+    .section-icon {
+      width: 40px; height: 40px;
+      border-radius: var(--radius-sm);
+      background: var(--accent-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0;
     }
 
-    /* ===== Sections ===== */
-    .section {
-      background: var(--card-bg);
-      border-radius: 12px;
-      box-shadow: var(--shadow);
-      padding: 36px 36px 32px;
-      margin-bottom: 24px;
+    .section-icon svg { width: 20px; height: 20px; color: var(--accent); }
+
+    .section-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 2px;
     }
 
     .section-title {
-      font-size: 1.25rem;
-      font-weight: 600;
+      font-size: 1.4rem;
+      font-weight: 700;
       color: var(--text);
-      margin-bottom: 24px;
-      padding-bottom: 12px;
-      border-bottom: 2px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      letter-spacing: -0.01em;
     }
 
-    .section-title::before {
-      content: '';
-      display: inline-block;
-      width: 4px;
-      height: 20px;
-      background: var(--accent);
-      border-radius: 2px;
-    }
+    /* ===== Timeline ===== */
+    .timeline { position: relative; padding-left: 0; }
 
-    /* ===== Work Experience ===== */
-    .experience-item {
-      margin-bottom: 28px;
-      padding-left: 20px;
-      border-left: 2px solid var(--border);
+    .timeline-item {
       position: relative;
+      padding: 26px 28px 26px 48px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      margin-bottom: 14px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03), 0 0 0 1px var(--border-light);
+      transition: transform var(--transition), box-shadow var(--transition);
+      cursor: default;
     }
 
-    .experience-item:last-child {
-      margin-bottom: 0;
+    .timeline-item:hover {
+      transform: translateX(4px);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.06), 0 0 0 1px var(--border);
     }
 
-    .experience-item::before {
+    .timeline-item::before {
       content: '';
       position: absolute;
-      left: -6px;
-      top: 6px;
-      width: 10px;
-      height: 10px;
+      left: 20px;
+      top: 30px;
+      width: 10px; height: 10px;
       background: var(--accent);
       border-radius: 50%;
+      box-shadow: 0 0 0 5px var(--accent-glow);
+      transition: box-shadow var(--transition);
     }
 
-    .experience-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 6px;
+    .timeline-item:hover::before {
+      box-shadow: 0 0 0 10px var(--accent-glow);
     }
 
-    .experience-role {
-      font-weight: 600;
-      font-size: 1.05rem;
+    .timeline-item::after {
+      content: '';
+      position: absolute;
+      left: 24px;
+      top: 48px;
+      width: 2px;
+      height: calc(100% + 14px);
+      background: var(--border);
+    }
+
+    .timeline-item:last-child::after { display: none; }
+
+    .timeline-role {
+      font-size: 1.08rem;
+      font-weight: 700;
       color: var(--text);
+      margin-bottom: 2px;
     }
 
-    .experience-company {
+    .timeline-company {
+      font-size: 0.9rem;
       color: var(--accent);
       font-weight: 500;
+      margin-bottom: 4px;
     }
 
-    .experience-date {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      white-space: nowrap;
+    .timeline-date {
+      display: inline-block;
+      font-size: 0.8rem;
+      color: var(--text-3);
+      font-weight: 500;
+      background: var(--bg);
+      padding: 3px 12px;
+      border-radius: 20px;
+      margin-bottom: 14px;
     }
 
-    .experience-desc {
-      color: var(--text-secondary);
-      font-size: 0.95rem;
-      line-height: 1.6;
-    }
-
-    .experience-desc ul {
+    .timeline-list {
       list-style: none;
       padding: 0;
     }
 
-    .experience-desc li {
+    .timeline-list li {
       position: relative;
-      padding-left: 16px;
-      margin-bottom: 4px;
+      padding-left: 18px;
+      margin-bottom: 6px;
+      font-size: 0.93rem;
+      color: var(--text-2);
+      line-height: 1.65;
     }
 
-    .experience-desc li::before {
-      content: '—';
+    .timeline-list li::before {
+      content: '';
       position: absolute;
-      left: 0;
-      color: var(--text-muted);
+      left: 0; top: 10px;
+      width: 5px; height: 5px;
+      background: var(--accent-2);
+      border-radius: 50%;
+      opacity: 0.6;
+    }
+
+    /* Highlight metric */
+    .metric-pop {
+      display: inline-block;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-glow);
+      padding: 1px 7px;
+      border-radius: 4px;
+      font-size: 0.9em;
     }
 
     /* ===== Education ===== */
-    .education-item {
+    .edu-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 26px 28px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03), 0 0 0 1px var(--border-light);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+
+    .edu-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.06), 0 0 0 1px var(--border);
+    }
+
+    .edu-header {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
       flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 16px;
-      padding-left: 20px;
-      border-left: 2px solid var(--border);
-      position: relative;
+      margin-bottom: 14px;
     }
 
-    .education-item:last-child {
-      margin-bottom: 0;
+    .edu-school { font-weight: 700; font-size: 1.08rem; }
+    .edu-major { color: var(--text-2); font-weight: 400; }
+    .edu-degree { color: var(--accent); font-weight: 600; font-size: 0.85rem; }
+    .edu-date { font-size: 0.85rem; color: var(--text-3); }
+
+    .edu-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
     }
 
-    .education-item::before {
-      content: '';
-      position: absolute;
-      left: -6px;
-      top: 6px;
-      width: 10px;
-      height: 10px;
-      background: var(--accent);
-      border-radius: 50%;
-    }
-
-    .education-school {
-      font-weight: 600;
-      font-size: 1.05rem;
-    }
-
-    .education-major {
-      color: var(--text-secondary);
-      font-weight: 400;
-    }
-
-    .education-degree {
-      color: var(--accent);
-      font-weight: 500;
+    .edu-detail {
+      flex: 1;
+      min-width: 220px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      padding: 16px 18px;
       font-size: 0.9rem;
+      color: var(--text-2);
+      line-height: 1.6;
     }
 
-    .education-date {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      white-space: nowrap;
+    .edu-detail strong {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
     }
 
     /* ===== Skills ===== */
-    .skill-category {
-      margin-bottom: 20px;
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
     }
 
-    .skill-category:last-child {
-      margin-bottom: 0;
+    .skill-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03), 0 0 0 1px var(--border-light);
+      transition: transform var(--transition), box-shadow var(--transition);
     }
 
-    .skill-category-name {
-      font-size: 0.85rem;
+    .skill-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.06), 0 0 0 1px var(--border);
+    }
+
+    .skill-card-title {
+      font-size: 0.78rem;
       font-weight: 600;
-      color: var(--text-muted);
+      color: var(--text-3);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 10px;
+      letter-spacing: 0.06em;
+      margin-bottom: 14px;
     }
 
     .skill-tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 7px;
     }
 
     .skill-tag {
       display: inline-block;
-      padding: 5px 14px;
-      background: var(--accent-light);
-      color: var(--accent);
+      padding: 5px 13px;
+      background: var(--bg);
+      color: var(--text-2);
       border-radius: 20px;
-      font-size: 0.9rem;
+      font-size: 0.86rem;
       font-weight: 500;
-      transition: background 0.2s, transform 0.15s;
+      border: 1px solid transparent;
+      transition: all var(--transition);
+      cursor: default;
     }
 
     .skill-tag:hover {
-      background: #dbeafe;
+      color: var(--accent);
+      background: var(--accent-glow);
+      border-color: rgba(79, 70, 229, 0.15);
       transform: translateY(-1px);
     }
 
-    /* ===== Contact Section ===== */
-    .contact-links {
+    /* ===== Contact ===== */
+    .contact-row {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
     }
 
-    .contact-link {
+    .contact-btn {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 10px 20px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      gap: 10px;
+      padding: 13px 22px;
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
       color: var(--text);
       text-decoration: none;
-      font-size: 0.95rem;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      font-size: 0.93rem;
+      font-weight: 500;
+      transition: all var(--transition);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
     }
 
-    .contact-link:hover {
+    .contact-btn:hover {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      box-shadow: 0 0 0 4px var(--accent-glow);
+      transform: translateY(-2px);
     }
 
-    .contact-link-icon {
-      width: 18px;
-      height: 18px;
-      color: var(--accent);
-    }
+    .contact-btn svg { width: 18px; height: 18px; color: var(--accent); flex-shrink: 0; }
 
     /* ===== Footer ===== */
     .footer {
       text-align: center;
-      padding: 32px 0 16px;
+      padding: 40px 24px 50px;
+      color: var(--text-3);
       font-size: 0.85rem;
-      color: var(--text-muted);
     }
 
-    /* ===== Placeholder Hint ===== */
-    .placeholder-note {
-      display: inline-block;
-      background: #fffbeb;
-      border: 1px dashed #f59e0b;
-      color: #92400e;
-      font-size: 0.8rem;
-      padding: 2px 8px;
-      border-radius: 4px;
-      cursor: default;
+    .footer-line {
+      width: 40px; height: 2px;
+      background: var(--border);
+      margin: 0 auto 16px;
+      border-radius: 1px;
+    }
+
+    /* ===== Scroll Animations ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-stagger > * { opacity: 0; transform: translateY(20px); }
+    .reveal-stagger > *.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     /* ===== Responsive ===== */
     @media (max-width: 640px) {
-      .container {
-        padding: 16px 16px 60px;
+      .hero { padding: 56px 20px 50px; }
+      .hero-avatar { width: 68px; height: 68px; font-size: 1.6rem; margin-bottom: 20px; }
+      .hero-name { font-size: 2rem; }
+      .hero-title { font-size: 1rem; }
+      .hero-contact { flex-direction: column; align-items: center; }
+
+      .stats-strip {
+        grid-template-columns: 1fr;
+        margin-top: -20px;
+        gap: 10px;
       }
 
-      .header {
-        padding: 40px 20px 32px;
-        border-radius: 12px;
-        margin-bottom: 20px;
-      }
+      .main { padding: 36px 16px 40px; }
+      .timeline-item { padding: 20px 16px 20px 38px; }
+      .timeline-item::before { left: 14px; top: 26px; }
+      .timeline-item::after { left: 18px; top: 44px; }
+      .timeline-item:hover { transform: translateX(2px); }
 
-      .header-name {
-        font-size: 1.8rem;
-      }
-
-      .header-contact {
-        flex-direction: column;
-        align-items: center;
-        gap: 8px;
-      }
-
-      .section {
-        padding: 24px 20px 20px;
-        margin-bottom: 16px;
-      }
-
-      .section-title {
-        font-size: 1.1rem;
-      }
-
-      .experience-header,
-      .education-item {
-        flex-direction: column;
-        gap: 2px;
-      }
+      .skills-grid { grid-template-columns: 1fr; }
+      .edu-header { flex-direction: column; gap: 2px; }
+      .edu-details { flex-direction: column; }
     }
 
     /* ===== Print ===== */
     @media print {
-      body {
-        background: #fff;
-        font-size: 13px;
-        line-height: 1.5;
+      .hero { background: #fff; color: #000; padding: 30px 20px 20px; }
+      .hero::before, .hero-grid { display: none; }
+      .hero-name { color: #000; }
+      .hero-title { color: #555; }
+      .hero-cta { color: #000; background: none; border: 1px solid #ccc; }
+
+      .stats-strip { margin-top: 20px; }
+      .stat-card { box-shadow: none; border: 1px solid #ddd; }
+
+      .reveal, .reveal-stagger > * {
+        opacity: 1 !important;
+        transform: none !important;
       }
 
-      .container {
-        max-width: 100%;
-        padding: 0;
+      .timeline-item, .skill-card, .edu-card, .stat-card {
+        box-shadow: none; border: 1px solid #ddd; break-inside: avoid;
       }
-
-      .section,
-      .header {
-        box-shadow: none;
-        border: 1px solid #e5e7eb;
-        break-inside: avoid;
-      }
-
-      .skill-tag:hover {
+      .timeline-item:hover, .skill-card:hover, .edu-card:hover, .stat-card:hover {
         transform: none;
-        background: var(--accent-light);
+        box-shadow: none;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
 
-    <!-- ===== Header ===== -->
-    <header class="header">
-      <h1 class="header-name">苟泽</h1>
-      <!-- TODO: 替换为你的真实职位/头衔 -->
-      <p class="header-title">软件工程师 <span class="placeholder-note">待更新</span></p>
-      <div class="header-contact">
-        <span class="contact-item">
-          <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+  <!-- ===== Hero ===== -->
+  <header class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-avatar">苟</div>
+      <h1 class="hero-name">苟泽</h1>
+      <p class="hero-title">谷歌搜索引擎优化师 · Google SEO Specialist</p>
+      <div class="hero-contact">
+        <a href="mailto:gouze7907@gmail.com" class="hero-cta">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
             <polyline points="22,6 12,13 2,6"/>
           </svg>
-        </span>
-        <a href="mailto:gouze7907@gmail.com">gouze7907@gmail.com</a>
-        <!-- TODO: 添加你的 GitHub / LinkedIn / 手机号等 -->
+          gouze7907@gmail.com
+        </a>
+        <a href="tel:17765529026" class="hero-cta">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          177-6552-9026
+        </a>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <!-- ===== 工作经历 ===== -->
-    <section class="section">
-      <h2 class="section-title">工作经历</h2>
-
-      <!-- TODO: 替换为真实的工作经历 -->
-      <div class="experience-item">
-        <div class="experience-header">
-          <span>
-            <span class="experience-role">前端开发工程师</span>
-            <span class="experience-company"> · XX科技</span>
-          </span>
-          <span class="experience-date">2023.06 — 至今 <span class="placeholder-note">占位</span></span>
-        </div>
-        <div class="experience-desc">
-          <ul>
-            <li>负责公司核心产品的前端架构设计与开发，使用 React + TypeScript 技术栈</li>
-            <li>优化页面性能，首屏加载时间降低 40%</li>
-            <li>参与组件库建设，沉淀 50+ 可复用业务组件</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="experience-item">
-        <div class="experience-header">
-          <span>
-            <span class="experience-role">软件开发实习生</span>
-            <span class="experience-company"> · YY网络</span>
-          </span>
-          <span class="experience-date">2022.06 — 2022.09 <span class="placeholder-note">占位</span></span>
-        </div>
-        <div class="experience-desc">
-          <ul>
-            <li>参与后端 API 开发与维护，使用 Node.js + Express 框架</li>
-            <li>编写单元测试，将测试覆盖率从 60% 提升至 85%</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== 教育背景 ===== -->
-    <section class="section">
-      <h2 class="section-title">教育背景</h2>
-
-      <!-- TODO: 替换为真实的教育背景 -->
-      <div class="education-item">
-        <div>
-          <span class="education-school">XX大学 <span class="placeholder-note">占位</span></span>
-          <span class="education-major"> · 计算机科学与技术</span>
-        </div>
-        <span>
-          <span class="education-degree">本科</span>
-          <span class="education-date"> 2020.09 — 2024.06</span>
-        </span>
-      </div>
-    </section>
-
-    <!-- ===== 技能 & 联系方式 ===== -->
-    <section class="section">
-      <h2 class="section-title">技能</h2>
-
-      <!-- TODO: 替换为你的真实技能 -->
-      <div class="skill-category">
-        <div class="skill-category-name">前端</div>
-        <div class="skill-tags">
-          <span class="skill-tag">HTML</span>
-          <span class="skill-tag">CSS</span>
-          <span class="skill-tag">JavaScript</span>
-          <span class="skill-tag">TypeScript</span>
-          <span class="skill-tag">React</span>
-          <span class="skill-tag">Vue</span>
-        </div>
-      </div>
-
-      <div class="skill-category">
-        <div class="skill-category-name">后端 & 工具</div>
-        <div class="skill-tags">
-          <span class="skill-tag">Node.js</span>
-          <span class="skill-tag">Python</span>
-          <span class="skill-tag">Git</span>
-          <span class="skill-tag">Docker</span>
-          <span class="skill-tag">MySQL</span>
-          <span class="skill-tag">Linux</span>
-        </div>
-      </div>
-
-      <!-- 联系方式 -->
-      <div class="skill-category" style="margin-top: 28px;">
-        <div class="skill-category-name">联系方式</div>
-        <div class="contact-links">
-          <a href="mailto:gouze7907@gmail.com" class="contact-link">
-            <svg class="contact-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-              <polyline points="22,6 12,13 2,6"/>
-            </svg>
-            gouze7907@gmail.com
-          </a>
-          <!-- TODO: 添加 GitHub / LinkedIn 等链接 -->
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== Footer ===== -->
-    <footer class="footer">
-      <p>苟泽 · 个人简历</p>
-      <p style="margin-top: 4px;">此页面内容为占位模板，请根据实际情况修改</p>
-    </footer>
-
+  <!-- ===== Stats ===== -->
+  <div class="stats-strip reveal">
+    <div class="stat-card">
+      <div class="stat-number">3 年+</div>
+      <div class="stat-label">Google SEO 实战经验</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">4 家</div>
+      <div class="stat-label">服务企业 / 操盘独立站</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">428%</div>
+      <div class="stat-label">最高自然流量增长</div>
+    </div>
   </div>
+
+  <!-- ===== Main Content ===== -->
+  <main class="main">
+
+    <!-- 工作经历 -->
+    <section class="section reveal">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+          </svg>
+        </div>
+        <div>
+          <div class="section-label">Experience</div>
+          <div class="section-title">工作经历</div>
+        </div>
+      </div>
+
+      <div class="timeline reveal-stagger">
+        <div class="timeline-item">
+          <div class="timeline-role">独立站谷歌搜索引擎优化师</div>
+          <div class="timeline-company">四川鸿生智恩食品有限公司（MHW-3BOMBER 轰炸机）</div>
+          <span class="timeline-date">2024.07 — 2025.06</span>
+          <ul class="timeline-list">
+            <li>负责品牌独立站基础运营及 SEO 全渠道推广，制定并执行 SEO 策略方案，从零搭建内容矩阵</li>
+            <li>主导创建博客教程板块与主题分类聚合页，关键词「虹吸手冲咖啡区别」<span class="metric-pop">100+</span> 词条入围 Google 精选搜索结果；三个搜索量 <span class="metric-pop">20k+</span> 核心大词登上精选摘要</li>
+            <li>前 10 名关键词从 117 个增长至 <span class="metric-pop">339 个</span>，"moka"(27.1k)、"moka machines"(22.2k) 等 10 个行业大词排至首页；SERP 精选结果从 4 个增至 <span class="metric-pop">254 个</span></li>
+            <li>自然流量 2,538 → 13,404（<span class="metric-pop">+428%</span>），转化率 0.53% → 1.04%；域名权重 DA 6 → <span class="metric-pop">27</span>（+350%）</li>
+          </ul>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-role">独立站谷歌搜索引擎优化师</div>
+          <div class="timeline-company">四川比得鑫科技有限公司</div>
+          <span class="timeline-date">2023.07 — 2024.07</span>
+          <ul class="timeline-list">
+            <li>负责网站运营及 SEO 渠道推广，提升关键词排名与自然流量</li>
+            <li>自然流量 GA 会话数达 2,800（同比 <span class="metric-pop">+134%</span>），自然渠道转化金额 $17,517（同比 <span class="metric-pop">+578%</span>）</li>
+            <li>GSC 曝光量 2.71 万（+97.8%），点击次数 5,235（+137%）</li>
+            <li>主导新品调研，筛选出 2 款潜力产品，上线半年内成为网站 <span class="metric-pop">销量 Top 3</span></li>
+          </ul>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-role">谷歌搜索引擎优化师</div>
+          <div class="timeline-company">创贸科技（深圳）集团有限公司（全球搜）</div>
+          <span class="timeline-date">2022.03 — 2023.06</span>
+          <ul class="timeline-list">
+            <li>负责英文网站站内优化及外链建设，制定 SEO 推广方案，提升 Google 搜索排名与自然流量</li>
+            <li>服务石家庄鸿欣橡胶等大型客户，谷歌首页核心关键词 <span class="metric-pop">200+</span>，首页总关键词 <span class="metric-pop">900+</span>，关键词库同比上升 4000%，流量上升 160%，年均 <span class="metric-pop">1000+</span> 封询盘</li>
+            <li>实习转正评估——同批次<span class="metric-pop">唯一</span>P2 级；入职半年竞聘<span class="metric-pop">第一名</span>，唯一晋升正式优化师</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 教育背景 -->
+    <section class="section reveal">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 4 3 6 3s6-1 6-3v-5"/>
+          </svg>
+        </div>
+        <div>
+          <div class="section-label">Education</div>
+          <div class="section-title">教育背景</div>
+        </div>
+      </div>
+
+      <div class="edu-card">
+        <div class="edu-header">
+          <div>
+            <span class="edu-school">西华师范大学</span>
+            <span class="edu-major"> · 商务英语</span>
+          </div>
+          <div>
+            <span class="edu-degree">本科</span>
+            <span class="edu-date"> · 2017.09 — 2021.06</span>
+          </div>
+        </div>
+        <div class="edu-details">
+          <div class="edu-detail">
+            <strong>主修课程</strong>
+            跨境电商、国际经济与贸易、商务翻译、经济学、管理学、报关实务、国际商务谈判、商务英语写作
+          </div>
+          <div class="edu-detail">
+            <strong>荣誉奖项</strong>
+            校级优秀学生干部 · 一等奖学金（2次）· 三等奖学金 · 优秀团员 · 商务英语实践大赛一等奖（郫县豆瓣营销策划方案）
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 技能 -->
+    <section class="section reveal">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </div>
+        <div>
+          <div class="section-label">Skills</div>
+          <div class="section-title">技能 & 工具</div>
+        </div>
+      </div>
+
+      <div class="skills-grid reveal-stagger">
+        <div class="skill-card">
+          <div class="skill-card-title">SEO & 数据分析</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Semrush</span>
+            <span class="skill-tag">Ahrefs</span>
+            <span class="skill-tag">KWFinder</span>
+            <span class="skill-tag">MOZ</span>
+            <span class="skill-tag">Google Search Console</span>
+            <span class="skill-tag">Google Analytics</span>
+            <span class="skill-tag">关键词研究</span>
+            <span class="skill-tag">外链策略</span>
+            <span class="skill-tag">E-E-A-T</span>
+          </div>
+        </div>
+
+        <div class="skill-card">
+          <div class="skill-card-title">建站 & 开发</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Shopify</span>
+            <span class="skill-tag">WordPress</span>
+            <span class="skill-tag">HTML</span>
+            <span class="skill-tag">CSS</span>
+            <span class="skill-tag">JavaScript</span>
+            <span class="skill-tag">UI/UX 优化</span>
+          </div>
+        </div>
+
+        <div class="skill-card">
+          <div class="skill-card-title">语言 & 证书</div>
+          <div class="skill-tags">
+            <span class="skill-tag">英语专八（良好）</span>
+            <span class="skill-tag">英语专四</span>
+            <span class="skill-tag">CET-4 / CET-6</span>
+            <span class="skill-tag">高中英语教师资格证</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 联系方式 -->
+    <section class="section reveal">
+      <div class="section-header">
+        <div class="section-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <div>
+          <div class="section-label">Contact</div>
+          <div class="section-title">联系方式</div>
+        </div>
+      </div>
+
+      <div class="contact-row reveal-stagger">
+        <a href="mailto:gouze7907@gmail.com" class="contact-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          邮箱：gouze7907@gmail.com
+        </a>
+        <a href="tel:17765529026" class="contact-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          电话：177-6552-9026
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-line"></div>
+    <p>苟泽 · 个人简历</p>
+  </footer>
+
+  <!-- ===== Scroll Animation Script ===== -->
+  <script>
+    (function() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const el = entry.target;
+            el.classList.add('visible');
+
+            // Stagger children
+            if (el.classList.contains('reveal-stagger')) {
+              const children = el.children;
+              Array.from(children).forEach((child, i) => {
+                child.style.transitionDelay = (i * 0.08) + 's';
+                child.classList.add('visible');
+              });
+            }
+
+            observer.unobserve(el);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
+
+      document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
 </body>
 </html>
